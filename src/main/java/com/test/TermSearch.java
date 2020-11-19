@@ -34,6 +34,11 @@ public class TermSearch {
         builder.query(QueryBuilders.termQuery("province","北京"));
 
         request.source(builder);
+        String replace = builder.toString().replace(" ", "\n");
+        System.out.println("query: "+replace);
+
+        System.out.println(request.toString());
+
 
         //  3.执行查询
         SearchResponse response = client.search(request, RequestOptions.DEFAULT);
@@ -44,7 +49,6 @@ public class TermSearch {
 
         }
     }
-
     @Test
     public void termsSearchTest() throws IOException {
         // 1.创建request对象

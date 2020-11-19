@@ -22,7 +22,7 @@ public class AggSearch {
     String type="sms-logs-type";
 
     @Test
-    public void aggCardinalityC() throws IOException {
+    public void aggCardinality() throws IOException {
 
         // 1.创建request
         SearchRequest request = new SearchRequest(index);

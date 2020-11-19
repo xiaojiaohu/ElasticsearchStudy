@@ -34,11 +34,11 @@ restful风格的web 接口：只要发送一个http请求，并且根据请求�
 
 # 1.3ES和solr
 
-1.solr 查询死数据，速度比es快。但是数据如果是改变的，solr查询速度会降低很多，ES的查询速度没有明显的改变
+1.查询效率:solr 查询死数据，速度比es快。但是数据如果是实时改变的，solr查询速度会降低很多，ES的查询速度没有明显的改变
 
-2.solr搭建集群 依赖ZK，ES本身就支持集群搭建
+2.solr搭建集群时需要依赖ZK来帮助管理，ES本身就支持集群搭建，不需要第三方介入
 
-3.最开始solr 的社区很火爆，针对国内文档 少，ES出现后，国内社区火爆程度 上升，，ES的文档非常健全
+3.最开始solr的社区很火爆，针对国内文档少，ES出现后，国内社区火爆程度上升，ES的文档非常健全
 
 4.ES对云计算和大数据支持很好
 
@@ -58,28 +58,50 @@ restful风格的web 接口：只要发送一个http请求，并且根据请求�
 
 http://hub.daocloud.io/    docker 镜像工厂地址
 
+1.创建一个独立目录，用于存放**docker-compose.yml** 文件
+
+```shell
+mkdir docker_es
+cd docker_es
+vim docker-compose.yml 
+```
+
+2.**docker-compose.yml** 文件内容
+
 ```yml
 version: "3.1"
 services:
-  elasticsearch: 
+  elasticsearch:
     image: daocloud.io/library/elasticsearch:6.5.4
     restart: always
     container_name: elasticsearch
-    ports: 
+    ports:
       - 9200:9200
-      - 9300:9300
-   kibana:
+  kibana:
     image: daocloud.io/library/kibana:6.5.4
     restart: always
     container_name: kibana
-    ports: 
-      - 9200:9200
+    ports:
+      - 5601:5601
     environment:
-      - elasticsearch_url=ip:9200
+      - elasticsearch_url=http://localhost:9200
     depends_on:
-      - elasticseatch
-   
+      - elasticsearch
 ```
+
+3.启动
+
+```she
+docker-compose up -d
+```
+
+4.查看启动|运行日志
+
+```shell
+docker-compose logs -f
+```
+
+
 
 或者本地下载
 

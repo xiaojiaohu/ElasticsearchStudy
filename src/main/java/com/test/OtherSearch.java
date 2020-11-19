@@ -16,7 +16,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-public class IdGetSearch {
+public class OtherSearch {
 
     ObjectMapper mapper = new ObjectMapper();
     RestHighLevelClient client =  EsClient.getClient();
@@ -57,6 +57,7 @@ public class IdGetSearch {
         }
     }
 
+    //前缀查询
     @Test
     public  void findByPrefix() throws IOException {
         //  创建request对象
@@ -79,6 +80,7 @@ public class IdGetSearch {
         }
     }
 
+    //模糊查询
     @Test
     public  void findByFuzzy() throws IOException {
         //  创建request对象
@@ -101,6 +103,7 @@ public class IdGetSearch {
         }
     }
 
+    //通配查询，同mysql中的like 是一样的
     @Test
     public  void findByWildCard() throws IOException {
         //  创建request对象
@@ -123,6 +126,7 @@ public class IdGetSearch {
         }
     }
 
+    //范围查询
     @Test
     public  void findByRang() throws IOException {
         //  创建request对象
@@ -145,6 +149,7 @@ public class IdGetSearch {
         }
     }
 
+    //正则查询
     @Test
     public  void findByRegexp() throws IOException {
         //  创建request对象

@@ -6,6 +6,7 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -31,8 +32,12 @@ public class FilterSearch {
         BoolQueryBuilder boolBuilder = QueryBuilders.boolQuery();
         boolBuilder.filter(QueryBuilders.termQuery("corpName","海尔智家公司"));
         boolBuilder.filter(QueryBuilders.rangeQuery("fee").gt(20));
+        boolBuilder.filter(QueryBuilders.boolQuery().
+                should(QueryBuilders.termQuery("province","晋城")).should(QueryBuilders.termQuery("state",1)));
         sourceBuilder.query(boolBuilder);
         searchRequest.source(sourceBuilder);
+
+        System.out.println(sourceBuilder.toString());
 
         //  3.执行
         SearchResponse response = client.search(searchRequest, RequestOptions.DEFAULT);
@@ -43,4 +48,60 @@ public class FilterSearch {
             System.out.println(hit.getId()+"的分数是："+hit.getScore());
         }
     }
+
+    /**
+     * {
+     *     "query":{
+     *         "bool":{
+     *             "filter":[
+     *                 {
+     *                     "term":{
+     *                         "corpName":{
+     *                             "value":"海尔智家公司",
+     *                             "boost":1
+     *                         }
+     *                     }
+     *                 },
+     *                 {
+     *                     "range":{
+     *                         "fee":{
+     *                             "from":20,
+     *                             "to":null,
+     *                             "include_lower":false,
+     *                             "include_upper":true,
+     *                             "boost":1
+     *                         }
+     *                     }
+     *                 },
+     *                 {
+     *                     "bool":{
+     *                         "should":[
+     *                             {
+     *                                 "term":{
+     *                                     "province":{
+     *                                         "value":"晋城",
+     *                                         "boost":1
+     *                                     }
+     *                                 }
+     *                             },
+     *                             {
+     *                                 "term":{
+     *                                     "state":{
+     *                                         "value":1,
+     *                                         "boost":1
+     *                                     }
+     *                                 }
+     *                             }
+     *                         ],
+     *                         "adjust_pure_negative":true,
+     *                         "boost":1
+     *                     }
+     *                 }
+     *             ],
+     *             "adjust_pure_negative":true,
+     *             "boost":1
+     *         }
+     *     }
+     * }
+     */
 }

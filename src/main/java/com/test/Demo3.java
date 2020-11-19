@@ -19,7 +19,6 @@ import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.Request;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
@@ -56,7 +55,7 @@ public class Demo3 {
         //  1.准备一个json数据
         Person person  = new Person(1,"张三",33,new Date());
         String json = mapper.writeValueAsString(person);
-        //  2.创建一个request对象(手动指定的方式创建)
+        //  2.创建一个request对象(手动指定id的方式创建)
         IndexRequest request = new IndexRequest(index,type,person.getId().toString());
         request.source(json, XContentType.JSON);
         // 3.使用client 操作request对象生成doc

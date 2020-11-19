@@ -4,10 +4,10 @@ import com.utils.EsClient;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
+import org.elasticsearch.action.admin.indices.get.GetIndexRequest;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.json.JsonXContent;
@@ -33,13 +33,13 @@ public class Demo2 {
     }
 
     @Test
-    public void createIndx() throws Exception{
-        // 1.准备关于索引的setting
+    public void createIndex() throws Exception{
+        // 1.准备关于索引的settings(分片、备份等）
         Settings.Builder settings = Settings.builder()
                 .put("number_of_shards", 2)
                 .put("number_of_replicas", 1);
 
-        // 2.准备关于索引的mapping
+        // 2.准备关于索引的mappings（类型、结构）
         XContentBuilder mappings = JsonXContent.contentBuilder()
                 .startObject()
                     .startObject("properties")
@@ -69,7 +69,8 @@ public class Demo2 {
     public void existTest() throws IOException {
 
         //  1.准备request 对象
-        GetIndexRequest request = new GetIndexRequest(index);
+        GetIndexRequest request = new GetIndexRequest();
+        request.indices(index);
 
         // 2.通过client 去 操作
         boolean exists = client.indices().exists(request, RequestOptions.DEFAULT);

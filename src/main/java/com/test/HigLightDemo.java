@@ -27,12 +27,15 @@ public class HigLightDemo {
 
       // 2.指定查询条件，指定高亮
         SearchSourceBuilder builder = new SearchSourceBuilder();
+        //2.1 指定查询条件
         builder.query(QueryBuilders.matchQuery("smsContent","团队"));
+        //2.2 指定高亮
         HighlightBuilder highlightBuilder = new HighlightBuilder();
         highlightBuilder.field("smsContent",10)
                 .preTags("<font colr='red'>")
                 .postTags("</font>");
         builder.highlighter(highlightBuilder);
+        System.out.println(builder.toString());
         request.source(builder);
 
       // 3.执行
